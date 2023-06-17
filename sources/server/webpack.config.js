@@ -6,9 +6,8 @@ module.exports = {
   }, // Dẫn tới file index.js ta đã tạo
   output: {
     path: path.join(__dirname, "/build"), // Thư mục chứa file được build ra
-    filename: "[name].js",// Tên file được build ra
-    clean : true
-  },
+    filename: "[name].js"
+  },// Tên file được build ra  }
   target : 'node',
   node : {
     __dirname : false,

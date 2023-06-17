@@ -402,665 +402,666 @@ class Wallet {
 
     // ---------------------
 }
-class SongNode{// song data structure 
-    /* example = {
-        contractAddress : "0x000",
-        artistAddress : "0x000",
-        artistName : "",
-        songName : "Just the Two of Us (feat. Bill Withers)",
-        author : "Grover Washington, Jr.",
-        url : "/assets/mp3/justthetwoofus.mp3"
-    } */
-    constructor(data){
-        this.data = data;
-        this.next = null;
-        this.prev = null;
-    }
-}
-
-class SongQueue{
-    #tail;
-    #head;
-    #totalSongInQueue;
-    #currentNodeSong;
-
-    constructor(){
-        this.#tail = null;
-        this.#head = null;
-        this.#totalSongInQueue = 0;
-    }
-
-    get #getHead(){
-        return this.#head;
-    }
-
-    get #getLast(){
-        return this.#tail;
-    }
-
-    getCurrentNodeSong(){
-        if (this.#currentNodeSong == null){
-            this.#currentNodeSong = this.#getLast;
-        }
-        return this.#currentNodeSong;
-    }
-
-    findAndGetSongByUrl(url){
-        if (!this.#totalSongInQueue){
-            return false;
-        }
-        let index = 0;
-        let currentNode = this.#getLast;
-        while (index < this.#totalSongInQueue){
-            if (currentNode.data.url == url){
-                this.#currentNodeSong = currentNode;
-                return this.#currentNodeSong;
-            }
-            if (!currentNode.prev) return false;
-            currentNode = currentNode.prev;
-            index++;
-        }
-        // return result
-        return false;
-    }
-
-    getPrevSong(){
-        if (!this.#currentNodeSong || !this.#currentNodeSong.next){
-            return false
-        }
-        this.#currentNodeSong = this.#currentNodeSong.next;
-        return this.#currentNodeSong;
-    }
-    getNextSongOfQueue(){
-        if (this.#currentNodeSong == null){
-            this.#currentNodeSong = this.#getLast;
-            return this.#currentNodeSong;
-        }
-        if (!this.#currentNodeSong.prev) return false;
-        this.#currentNodeSong = this.#currentNodeSong.prev;
-        return this.#currentNodeSong;
-    }
-
-    getRandomSongOfQueue(){
-        if (!this.#totalSongInQueue){
-            return false;
-        }
-        if (this.#totalSongInQueue == 1){
-            return this.#getLast;
-        }
-        const rand = Math.floor(((Math.random()*100)% this.#totalSongInQueue + 1))
-        let index = 0;
-        let currentNode = this.#getLast;
-        while (index < rand){
-            if (!currentNode.prev) return false;
-            currentNode = currentNode.prev;
-            index++;
-        }
-        // check this random song is unique
-        if (this.#currentNodeSong == currentNode){
-            return this.getRandomSongOfQueue();
-        }
-        // return result
-        console.log(this.#currentNodeSong);
-        this.#currentNodeSong = currentNode;
-        return this.#currentNodeSong;
-    }
-
-    async #fetchStatusSong(url){
-        try {
-            const status = await fetch(url, {
-                method : "GET"
-            })
-            if (!status.ok) return false;
-            return true;
-        } catch (error) {
-            return false;
-        }
-    }
-
-    async addSong(data){
-        if (!data || !data.tokenURI || !await this.#fetchStatusSong(baseUriReplace(data.tokenURI))) return false;
-        const node = new SongNode(data);
-        if (this.isQueueEmpty){
-            this.#tail = this.#head = node;
-            this.#currentNodeSong = this.#tail
-        }else{
-            node.next = this.#head;
-            this.#head.prev = node;
-            this.#head = node;
-        }
-        this.#totalSongInQueue++;
-        return this.#head;
-    }
-
-    async addOneSongToQueue(song){
-        return await this.addSong(song);
-    }
-
-    async addPlaylistToQueue(playlist){
-        let count = 0;
-        for (const songId in playlist) {
-            if (Object.hasOwnProperty.call(playlist, songId)) {
-                if (await this.addOneSongToQueue(playlist[songId])){
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
-
-    repeatQueue(){
-        if (this.isQueueEmpty) return false;
-        this.#currentNodeSong = this.#getLast;
-        console.log(this.#currentNodeSong);
-        return this.#currentNodeSong;
-    }
-
-    get isQueueEmpty(){
-        return this.#totalSongInQueue === 0;
-    }
-
-    get getTotalSong(){
-        return this.#totalSongInQueue;
-    }
-}
-
-class MusicPlayer{
-    #playerElement = new Audio();
-    #queue = new SongQueue();
-    #songUrl;
-    #prevSong;
-    #nextSong;
-
-    #repeated = 0; // 0 : no | 1 : repeat | -1 : repeat only 1
-    #shuffle = 0; // 0 : off | 1 : on |
-    #currentTime = 0;
-    #endTime = 0;
-    #volume = 1;
-    #muted = 0;
-
-    // UI
-    #musicPlayerElement = document.querySelector("#music-player");
-    #ui_progress = this.#musicPlayerElement.querySelector(".music-timeline .progress-bar");
-    #ui_volumeProgress = this.#musicPlayerElement.querySelector(".music-setting .volume__progress-bar");
-    #songThumbnailElement = this.#musicPlayerElement.querySelector(".music-poster img");
-    #songNameElement = this.#musicPlayerElement.querySelector(".music-detail .title");
-    #songAuthorElement = this.#musicPlayerElement.querySelector(".music-detail .music-by");
-
-    constructor(){
-        this.eventMusicPlayer();
-    }
-
-    async startApp(queue, currentTime = 0, url = '', volume = 1, shuffle = 0, repeated = 0, muted = 0){
-        if (!queue || !queue.getTotalSong) return false;
-        this.#queue = queue;
-        this.#muted = muted;
-        this.#volume = volume;
-        this.#playerElement.volume = muted ? 0 : volume;
-        this.ui_initVolumeProgress()
-        this.#shuffle = shuffle;
-        this.#repeated= repeated;
-        const t = this.#musicPlayerElement.querySelector(".music-play-controls .repeat-btn");
-        if (!this.#repeated){
-            t.querySelector("svg:first-of-type").style.display = "none"
-            t.querySelector("svg:last-of-type").style.display = "inline"
-        }
-        else if (this.#repeated == 1){
-            t.querySelector("svg:first-of-type").style.display = "none"
-            t.querySelector("svg:last-of-type").style.display = "inline"
-            t.classList.add("btn--on")
-        }else{
-            t.querySelector("svg:first-of-type").style.display = "inline"
-            t.querySelector("svg:last-of-type").style.display = "none"
-            t.classList.add("btn--on");
-        }
-        const s = this.#musicPlayerElement.querySelector(".music-play-controls .shuffle-btn");
-        if (this.#shuffle){
-            s.classList.add("btn--on");
-        }else{
-            t.classList.remove("btn--on");
-        }
-        let song = this.#queue.findAndGetSongByUrl(url);
-        this.#playerElement.currentTime = currentTime;
-        if (!song){
-            song = this.#queue.getCurrentNodeSong();
-            this.#playerElement.currentTime = 0;
-        }
-        if (!song && !this.#repeated){
-            return false;
-        }
-        this.#nextSong = !!song.prev;
-        this.#prevSong = !!song.next;
-        this.ui_previousAndNextButton();
-        if (!song && this.#repeated == 1){
-            // Listen again
-            this.#queue.repeatQueue();
-            this.nextSong(1);
-            return true;
-        }
-        await this.ui_loadSong(song);
-        this.#musicPlayerElement.classList.remove("off");
-        return true;
-    }
-
-    get #getPlayerElement(){
-        return this.#playerElement;
-    }
-
-    get getCurrentSong(){
-        return this.#songUrl;
-    }
-
-    set #setSongUrl(url){
-        this.#songUrl = url;
-    }
-
-    get getQueuePlaylist(){
-        return this.#queue;
-    }
-
-    async play(){
-        if (!this.#songUrl){
-            const checkQueue = await this.nextSong(1)
-            if (!checkQueue) return false;
-            return true;
-        }
-        const t = this.#musicPlayerElement.querySelector(".play-btn");
-        if (!this.#playerElement.paused){
-            t.classList.remove("pause")
-            this.#getPlayerElement.pause();
-            return false;
-        }
-        t.classList.add("pause")
-        this.#getPlayerElement.play()
-        return true;
-    }  
-
-    async nextSong(init = 0){
-        let nextSongNode = this.#shuffle && !this.#repeated 
-        ? this.#queue.getRandomSongOfQueue()
-        : this.#queue.getNextSongOfQueue();
-        if (!nextSongNode && !this.#repeated){
-            return 0;
-        }
-        this.#nextSong = !!nextSongNode.prev;
-        this.#prevSong = !!nextSongNode.next;
-        this.ui_previousAndNextButton();
-        if (!nextSongNode && this.#repeated){
-            // Listen again
-            nextSongNode = this.#queue.repeatQueue();
-        }
-        await this.ui_loadSong(nextSongNode);
-        if (!init)
-            return this.play();
-        return 1;
-    }
-
-    async prevSong(){
-        let prevSongNode = this.#queue.getPrevSong();
-        if (!prevSongNode){
-            return 0;
-        }
-        this.#nextSong = !!prevSongNode.prev;
-        this.#prevSong = !!prevSongNode.next;
-        this.ui_previousAndNextButton();
-        await this.ui_loadSong(prevSongNode);
-        return this.play();
-    }
-
-    loadSongDuration(){
-        return new Promise((resolve, reject)=>{
-            this.#playerElement.addEventListener('loadedmetadata', ()=>{
-            this.#endTime = this.#playerElement.duration
-            this.#currentTime = this.#playerElement.currentTime;
-            resolve(true);
-            });
-        });
-    }
-    // ---
-    // event listener
-    // update progress
-    eventMusicPlayer(){
-        // auto save
-        const autoSaveSetting = ()=>{
-            let songSetting = JSON.stringify({
-                currentTime : this.#currentTime,
-                url : this.#songUrl,
-                shuffle : this.#shuffle,
-                repeated : this.#repeated,
-                volume : this.#volume,
-                muted : this.#muted
-            })
-            window.localStorage.setItem("lastSetting", songSetting)
-        }
-        let autoSaveFunc = setInterval(autoSaveSetting, 3000)
-        //clearInterval(autoSaveFunc);
-        //
-        // update progress
-        this.#playerElement.addEventListener('timeupdate', (e)=>{
-            this.#currentTime = this.#playerElement.currentTime;
-            this.ui_updateProgress();
-        });
-        let volumeIcon = document.querySelector(".music-setting .volume-icon");
-        let currentVolumeProgress = this.#ui_volumeProgress.querySelector(".volume__current-progress");
-        let volumePointer = this.#ui_volumeProgress.querySelector(".pointer");
-        let timePointer = this.#ui_progress.querySelector(".pointer");
-        let playBtn = this.#musicPlayerElement.querySelector(".play-btn");
-        let shuffleBtn = this.#musicPlayerElement.querySelector(".music-play-controls .shuffle-btn");
-        // set volume progress
-        volumeIcon.addEventListener('click',()=>{
-            if (this.#muted){
-                this.#muted = 0;
-                this.#volume = !this.#volume ? 0.1 : this.#volume;
-                this.#playerElement.volume = this.#volume;
-                currentVolumeProgress.style.width = `${this.#volume*100}%`;
-                volumeIcon.classList.remove("muted");
-                if (this.#volume >= 0.5){
-                    return volumeIcon.classList.add("loud");
-                }
-                return volumeIcon.classList.remove("loud");
-            }
-            this.#muted = 1;
-            this.#playerElement.volume = 0;
-            currentVolumeProgress.style.width = `${0}%`;
-            return volumeIcon.classList.add("muted");
-        })
-        this.#ui_volumeProgress.addEventListener('click', (e)=>{
-            if (e.target == volumePointer) return false;
-            return this.ui_setVolumeProgress(e);
-        });
-        this.#ui_volumeProgress.addEventListener('mousedown', (e)=>{
-            if (e.target == volumePointer) return false;
-            return this.ui_setVolumeProgress(e);
-        });
-        // set progress
-        this.#ui_progress.addEventListener('click', (e)=>{
-            if (e.target == timePointer) return false;
-            if (this.#songUrl)  return this.ui_setProgress(e);
-        });
-        this.#ui_progress.addEventListener('mousedown', (e)=>{
-            if (e.target == timePointer) return false;
-            if (this.#songUrl)  return this.ui_setProgress(e);
-        });
-
-        // end song
-        this.#playerElement.addEventListener('ended', async ()=>{
-            playBtn.classList.add("pause");
-            if (this.#repeated == -1){
-                playBtn.classList.remove("pause");
-                this.#currentTime = 0;
-                this.#playerElement.currentTime = this.#currentTime;
-                this.#playerElement.play();
-                return -1;
-            }
-            playBtn.classList.remove("pause");
-            this.nextSong()
-            return 1;
-        });
-
-        // main controls func
-        playBtn
-        .addEventListener("click", async (e)=>{
-            //return await this.play();
-            const status  = await this.play();
-            if (!status){
-                return clearInterval(autoSaveFunc);
-            }
-            return autoSaveFunc = setInterval(autoSaveSetting,3000);
-        })
-        //shuffle
-        shuffleBtn
-        .addEventListener("click",(e)=>{
-            e.preventDefault();
-            if (!this.#shuffle){
-                this.#shuffle = 1;
-            }else{
-                this.#shuffle = 0;
-            }
-            this.ui_previousAndNextButton()
-            shuffleBtn.classList.toggle("btn--on");
-            return;
-        })
-        let repeatBtn = this.#musicPlayerElement.querySelector(".music-play-controls .repeat-btn")
-        //repeated
-        repeatBtn
-        .addEventListener("click",(e)=>{
-            e.preventDefault()
-            this.ui_previousAndNextButton();
-            if (!this.#repeated){
-                this.#repeated++;
-                repeatBtn.querySelector("svg:first-of-type").style.display = "none"
-                repeatBtn.querySelector("svg:last-of-type").style.display = "inline"
-                repeatBtn.classList.toggle("btn--on")
-            }
-            else if (this.#repeated == 1){
-                this.#repeated = -1;
-                repeatBtn.querySelector("svg:first-of-type").style.display = "inline"
-                repeatBtn.querySelector("svg:last-of-type").style.display = "none"
-            }else{
-                this.#repeated = 0;
-                repeatBtn.querySelector("svg:first-of-type").style.display = "none"
-                repeatBtn.querySelector("svg:last-of-type").style.display = "inline"
-                repeatBtn.classList.toggle("btn--on");
-            }
-            this.ui_previousAndNextButton();
-            return ;
-        })
-        
-        let nextBtn = this.#musicPlayerElement.querySelector(".music-play-controls .next-btn")
-        // skip btn
-        nextBtn
-        .addEventListener("click", async(e)=>{
-            if (!this.#nextSong && !this.#shuffle){
-                if (!this.#nextSong && !this.#repeated) return false;
-            }
-            const status = await this.nextSong();
-            if (!status){
-                this.#playerElement.currentTime = this.#endTime;
-            }
-            return status;
-        })
-
-        // prev btn
-        let prevBtn = this.#musicPlayerElement.querySelector(".music-play-controls .previous-btn");
-        prevBtn
-        .addEventListener("click", async(e)=>{
-            if (!this.#prevSong || this.#shuffle) return false;
-            const status = await this.prevSong();
-            if (!status){
-                this.#playerElement.currentTime = 0;
-            }
-            return status;
-        })
-    }
-
-    // utils
-    formatTime(input) {
-        const hours = Math.floor(input / 3600);
-        const minutes = Math.floor((input % 3600) / 60);
-        const seconds = Math.round(input % 60);
-        
-        const formattedTime = hours > 0 ? hours.toString().padStart(2, '0') + ':' +
-                            minutes.toString().padStart(2, '0') + ':' +
-                            seconds.toString().padStart(2, '0')
-                            : minutes.toString() + ':' +
-                            seconds.toString().padStart(2, '0');
-        return formattedTime;
-    }
-    //render HTML
-    ui_initTime(){
-        this.#musicPlayerElement.querySelector(".time-start").textContent = this.formatTime(this.#currentTime);
-        this.#musicPlayerElement.querySelector(".time-end").textContent = this.formatTime(this.#endTime);
-    }
-
-    ui_updateProgress(){
-        const percentWidth = (this.#currentTime / this.#playerElement.duration) * 100;
-        this.#ui_progress.querySelector(".current-progress").style.width = `${percentWidth}%`;
-        const t = this.formatTime(this.#currentTime);
-        this.#musicPlayerElement.querySelector(".time-start").textContent = t;
-    }
-
-    ui_setProgress(e) {
-        const width = e.offsetX;
-        const progress = e.currentTarget;
-        const progressBarWidth = (width / progress.clientWidth) * 100;
-        this.#ui_progress.querySelector(".current-progress").style.width = `${progressBarWidth}%`;
-        this.#playerElement.currentTime = (width * this.#endTime) / progress.clientWidth;
-    }
-
-    ui_initVolumeProgress (){
-        const vI = document.querySelector(".music-setting .volume-icon");
-        let progressBarWidth = this.#volume * 100;
-        this.#ui_volumeProgress.querySelector(".volume__current-progress").style.width = `${progressBarWidth}%`;
-        if (!this.#volume || this.#muted){
-            this.#muted = 1;
-            return vI.classList.add("muted");
-        }
-        if (this.#volume >= 0.5){
-            return vI.classList.add("loud");
-        }
-        return vI.classList.remove("loud");
-    }
-
-    ui_setVolumeProgress(e) {
-        const vI = document.querySelector(".music-setting .volume-icon");
-        const width = e.offsetX;
-        const vProgress = e.currentTarget;
-        let progressBarWidth = (width / vProgress.clientWidth) * 100;
-        this.#volume = width / vProgress.clientWidth;
-        if (progressBarWidth <= 6){
-            progressBarWidth = 0;
-            this.#volume = 0;
-        }else if(progressBarWidth >= 92){
-            progressBarWidth = 100;
-            this.#volume = 1;
-        }
-        this.#ui_volumeProgress.querySelector(".volume__current-progress").style.width = `${progressBarWidth}%`;
-        if (!this.#volume || this.#muted){
-            this.#muted = 1;
-            vI.classList.add("muted");
-        }
-        if (!this.#muted){
-            vI.classList.remove("muted");
-        }
-        if (this.#volume >= 0.5){
-            vI.classList.add("loud");
-            this.#muted = 0;
-        }
-        else {
-            this.#muted = 0;
-            vI.classList.remove("loud");
-        }
-        this.#playerElement.volume = this.#volume;
-    }
-
-    ui_previousAndNextButton(){
-        if (this.#nextSong || this.#shuffle || this.#repeated){ // if has next song
-            this.#musicPlayerElement.classList.remove("block-next");
-        }else{
-            this.#musicPlayerElement.classList.add("block-next");   
-        }
-        if (this.#prevSong && !this.#shuffle){ // if has prev song
-            return this.#musicPlayerElement.classList.remove("block-prev");
-        }
-        return this.#musicPlayerElement.classList.add("block-prev")
-    }
-
-    async ui_loadSong(songNode){
+async function App() {
+      
+    class SongNode{// song data structure 
         /* example = {
-            tokenURI : "Qqdxxxx",
+            contractAddress : "0x000",
             artistAddress : "0x000",
             artistName : "",
             songName : "Just the Two of Us (feat. Bill Withers)",
-            audio : "/assets/mp3/justthetwoofus.mp3",
-            image : "/assets/",
-            cover_image : "/asdsad",
-            description : "hello"
-            playlistName : "Test"
+            author : "Grover Washington, Jr.",
+            url : "/assets/mp3/justthetwoofus.mp3"
         } */
-        const songStructure = songNode.data;
-        if (!songNode || !songStructure) return false; 
-        this.#songUrl = baseUriReplace(songStructure.audio);
-        this.#playerElement.src = this.#songUrl;
-        this.#songAuthorElement.textContent = !songStructure.artistName ? songStructure.artistAddress : songStructure.artistName;
-        this.#songAuthorElement.setAttribute("href", `/artist/${songStructure.artistAddress}`);
-        this.#songNameElement.textContent = songStructure.name;
-        this.#songNameElement.setAttribute("href", `/song/${songStructure.tokenURI}`)
-        this.#songThumbnailElement.setAttribute("src", `${baseUriReplace(songStructure.image)}`); 
-        this.loadSongDuration().then(()=>{
-            this.ui_initTime();
-            this.createMediaSession(songStructure)
-            return true;
-        })
-        .catch(error=>{
-            console.log(error);
-            return false;
-        })
+        constructor(data){
+            this.data = data;
+            this.next = null;
+            this.prev = null;
+        }
     }
 
-    createMediaSession(songData){
-        if ("mediaSession" in navigator) {
-            navigator.mediaSession.metadata = new MediaMetadata({
-                title: songData.name,
-                artist: songData.artistAddress,
-                album: songData.playlistName || "",
-                artwork: [
-                    { src: baseUriReplace(songData.image)},
-                    { src: baseUriReplace(songData.cover_image)},
-                ]
+    class SongQueue{
+        #tail;
+        #head;
+        #totalSongInQueue;
+        #currentNodeSong;
+
+        constructor(){
+            this.#tail = null;
+            this.#head = null;
+            this.#totalSongInQueue = 0;
+        }
+
+        get #getHead(){
+            return this.#head;
+        }
+
+        get #getLast(){
+            return this.#tail;
+        }
+
+        getCurrentNodeSong(){
+            if (this.#currentNodeSong == null){
+                this.#currentNodeSong = this.#getLast;
+            }
+            return this.#currentNodeSong;
+        }
+
+        findAndGetSongByUrl(url){
+            if (!this.#totalSongInQueue){
+                return false;
+            }
+            let index = 0;
+            let currentNode = this.#getLast;
+            while (index < this.#totalSongInQueue){
+                if (currentNode.data.url == url){
+                    this.#currentNodeSong = currentNode;
+                    return this.#currentNodeSong;
+                }
+                if (!currentNode.prev) return false;
+                currentNode = currentNode.prev;
+                index++;
+            }
+            // return result
+            return false;
+        }
+
+        getPrevSong(){
+            if (!this.#currentNodeSong || !this.#currentNodeSong.next){
+                return false
+            }
+            this.#currentNodeSong = this.#currentNodeSong.next;
+            return this.#currentNodeSong;
+        }
+        getNextSongOfQueue(){
+            if (this.#currentNodeSong == null){
+                this.#currentNodeSong = this.#getLast;
+                return this.#currentNodeSong;
+            }
+            if (!this.#currentNodeSong.prev) return false;
+            this.#currentNodeSong = this.#currentNodeSong.prev;
+            return this.#currentNodeSong;
+        }
+
+        getRandomSongOfQueue(){
+            if (!this.#totalSongInQueue){
+                return false;
+            }
+            if (this.#totalSongInQueue == 1){
+                return this.#getLast;
+            }
+            const rand = Math.floor(((Math.random()*100)% this.#totalSongInQueue + 1))
+            let index = 0;
+            let currentNode = this.#getLast;
+            while (index < rand){
+                if (!currentNode.prev) return false;
+                currentNode = currentNode.prev;
+                index++;
+            }
+            // check this random song is unique
+            if (this.#currentNodeSong == currentNode){
+                return this.getRandomSongOfQueue();
+            }
+            // return result
+            console.log(this.#currentNodeSong);
+            this.#currentNodeSong = currentNode;
+            return this.#currentNodeSong;
+        }
+
+        async #fetchStatusSong(url){
+            try {
+                const status = await fetch(url, {
+                    method : "GET"
+                })
+                if (!status.ok) return false;
+                return true;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        async addSong(data){
+            if (!data || !data.tokenURI || !await this.#fetchStatusSong(baseUriReplace(data.tokenURI))) return false;
+            const node = new SongNode(data);
+            if (this.isQueueEmpty){
+                this.#tail = this.#head = node;
+                this.#currentNodeSong = this.#tail
+            }else{
+                node.next = this.#head;
+                this.#head.prev = node;
+                this.#head = node;
+            }
+            this.#totalSongInQueue++;
+            return this.#head;
+        }
+
+        async addOneSongToQueue(song){
+            return await this.addSong(song);
+        }
+
+        async addPlaylistToQueue(playlist){
+            let count = 0;
+            for (const songId in playlist) {
+                if (Object.hasOwnProperty.call(playlist, songId)) {
+                    if (await this.addOneSongToQueue(playlist[songId])){
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
+
+        repeatQueue(){
+            if (this.isQueueEmpty) return false;
+            this.#currentNodeSong = this.#getLast;
+            console.log(this.#currentNodeSong);
+            return this.#currentNodeSong;
+        }
+
+        get isQueueEmpty(){
+            return this.#totalSongInQueue === 0;
+        }
+
+        get getTotalSong(){
+            return this.#totalSongInQueue;
+        }
+    }
+
+    class MusicPlayer{
+        #playerElement = new Audio();
+        #queue = new SongQueue();
+        #songUrl;
+        #prevSong;
+        #nextSong;
+
+        #repeated = 0; // 0 : no | 1 : repeat | -1 : repeat only 1
+        #shuffle = 0; // 0 : off | 1 : on |
+        #currentTime = 0;
+        #endTime = 0;
+        #volume = 1;
+        #muted = 0;
+
+        // UI
+        #musicPlayerElement = document.querySelector("#music-player");
+        #ui_progress = this.#musicPlayerElement.querySelector(".music-timeline .progress-bar");
+        #ui_volumeProgress = this.#musicPlayerElement.querySelector(".music-setting .volume__progress-bar");
+        #songThumbnailElement = this.#musicPlayerElement.querySelector(".music-poster img");
+        #songNameElement = this.#musicPlayerElement.querySelector(".music-detail .title");
+        #songAuthorElement = this.#musicPlayerElement.querySelector(".music-detail .music-by");
+
+        constructor(){
+            this.eventMusicPlayer();
+        }
+
+        async startApp(queue, currentTime = 0, url = '', volume = 1, shuffle = 0, repeated = 0, muted = 0){
+            if (!queue || !queue.getTotalSong) return false;
+            this.#queue = queue;
+            this.#muted = muted;
+            this.#volume = volume;
+            this.#playerElement.volume = muted ? 0 : volume;
+            this.ui_initVolumeProgress()
+            this.#shuffle = shuffle;
+            this.#repeated= repeated;
+            const t = this.#musicPlayerElement.querySelector(".music-play-controls .repeat-btn");
+            if (!this.#repeated){
+                t.querySelector("svg:first-of-type").style.display = "none"
+                t.querySelector("svg:last-of-type").style.display = "inline"
+            }
+            else if (this.#repeated == 1){
+                t.querySelector("svg:first-of-type").style.display = "none"
+                t.querySelector("svg:last-of-type").style.display = "inline"
+                t.classList.add("btn--on")
+            }else{
+                t.querySelector("svg:first-of-type").style.display = "inline"
+                t.querySelector("svg:last-of-type").style.display = "none"
+                t.classList.add("btn--on");
+            }
+            const s = this.#musicPlayerElement.querySelector(".music-play-controls .shuffle-btn");
+            if (this.#shuffle){
+                s.classList.add("btn--on");
+            }else{
+                t.classList.remove("btn--on");
+            }
+            let song = this.#queue.findAndGetSongByUrl(url);
+            this.#playerElement.currentTime = currentTime;
+            if (!song){
+                song = this.#queue.getCurrentNodeSong();
+                this.#playerElement.currentTime = 0;
+            }
+            if (!song && !this.#repeated){
+                return false;
+            }
+            this.#nextSong = !!song.prev;
+            this.#prevSong = !!song.next;
+            this.ui_previousAndNextButton();
+            if (!song && this.#repeated == 1){
+                // Listen again
+                this.#queue.repeatQueue();
+                this.nextSong(1);
+                return true;
+            }
+            await this.ui_loadSong(song);
+            this.#musicPlayerElement.classList.remove("off");
+            return true;
+        }
+
+        get #getPlayerElement(){
+            return this.#playerElement;
+        }
+
+        get getCurrentSong(){
+            return this.#songUrl;
+        }
+
+        set #setSongUrl(url){
+            this.#songUrl = url;
+        }
+
+        get getQueuePlaylist(){
+            return this.#queue;
+        }
+
+        async play(){
+            if (!this.#songUrl){
+                const checkQueue = await this.nextSong(1)
+                if (!checkQueue) return false;
+                return true;
+            }
+            const t = this.#musicPlayerElement.querySelector(".play-btn");
+            if (!this.#playerElement.paused){
+                t.classList.remove("pause")
+                this.#getPlayerElement.pause();
+                return false;
+            }
+            t.classList.add("pause")
+            this.#getPlayerElement.play()
+            return true;
+        }  
+
+        async nextSong(init = 0){
+            let nextSongNode = this.#shuffle && !this.#repeated 
+            ? this.#queue.getRandomSongOfQueue()
+            : this.#queue.getNextSongOfQueue();
+            if (!nextSongNode && !this.#repeated){
+                return 0;
+            }
+            this.#nextSong = !!nextSongNode.prev;
+            this.#prevSong = !!nextSongNode.next;
+            this.ui_previousAndNextButton();
+            if (!nextSongNode && this.#repeated){
+                // Listen again
+                nextSongNode = this.#queue.repeatQueue();
+            }
+            await this.ui_loadSong(nextSongNode);
+            if (!init)
+                return this.play();
+            return 1;
+        }
+
+        async prevSong(){
+            let prevSongNode = this.#queue.getPrevSong();
+            if (!prevSongNode){
+                return 0;
+            }
+            this.#nextSong = !!prevSongNode.prev;
+            this.#prevSong = !!prevSongNode.next;
+            this.ui_previousAndNextButton();
+            await this.ui_loadSong(prevSongNode);
+            return this.play();
+        }
+
+        loadSongDuration(){
+            return new Promise((resolve, reject)=>{
+                this.#playerElement.addEventListener('loadedmetadata', ()=>{
+                this.#endTime = this.#playerElement.duration
+                this.#currentTime = this.#playerElement.currentTime;
+                resolve(true);
+                });
             });
         }
-        const actionHandlers = [
-            ['play', async () => {
-                return await this.play();
-            }],
-            ['pause', async () => {
-                return await this.play();
-            }],
-            ['previoustrack', async () => {
-                if (!this.#prevSong || this.#shuffle){
-                    this.#playerElement.currentTime = 0;
-                    return false;
-                };
+        // ---
+        // event listener
+        // update progress
+        eventMusicPlayer(){
+            // auto save
+            const autoSaveSetting = ()=>{
+                let songSetting = JSON.stringify({
+                    currentTime : this.#currentTime,
+                    url : this.#songUrl,
+                    shuffle : this.#shuffle,
+                    repeated : this.#repeated,
+                    volume : this.#volume,
+                    muted : this.#muted
+                })
+                window.localStorage.setItem("lastSetting", songSetting)
+            }
+            let autoSaveFunc = setInterval(autoSaveSetting, 3000)
+            //clearInterval(autoSaveFunc);
+            //
+            // update progress
+            this.#playerElement.addEventListener('timeupdate', (e)=>{
+                this.#currentTime = this.#playerElement.currentTime;
+                this.ui_updateProgress();
+            });
+            let volumeIcon = document.querySelector(".music-setting .volume-icon");
+            let currentVolumeProgress = this.#ui_volumeProgress.querySelector(".volume__current-progress");
+            let volumePointer = this.#ui_volumeProgress.querySelector(".pointer");
+            let timePointer = this.#ui_progress.querySelector(".pointer");
+            let playBtn = this.#musicPlayerElement.querySelector(".play-btn");
+            let shuffleBtn = this.#musicPlayerElement.querySelector(".music-play-controls .shuffle-btn");
+            // set volume progress
+            volumeIcon.addEventListener('click',()=>{
+                if (this.#muted){
+                    this.#muted = 0;
+                    this.#volume = !this.#volume ? 0.1 : this.#volume;
+                    this.#playerElement.volume = this.#volume;
+                    currentVolumeProgress.style.width = `${this.#volume*100}%`;
+                    volumeIcon.classList.remove("muted");
+                    if (this.#volume >= 0.5){
+                        return volumeIcon.classList.add("loud");
+                    }
+                    return volumeIcon.classList.remove("loud");
+                }
+                this.#muted = 1;
+                this.#playerElement.volume = 0;
+                currentVolumeProgress.style.width = `${0}%`;
+                return volumeIcon.classList.add("muted");
+            })
+            this.#ui_volumeProgress.addEventListener('click', (e)=>{
+                if (e.target == volumePointer) return false;
+                return this.ui_setVolumeProgress(e);
+            });
+            this.#ui_volumeProgress.addEventListener('mousedown', (e)=>{
+                if (e.target == volumePointer) return false;
+                return this.ui_setVolumeProgress(e);
+            });
+            // set progress
+            this.#ui_progress.addEventListener('click', (e)=>{
+                if (e.target == timePointer) return false;
+                if (this.#songUrl)  return this.ui_setProgress(e);
+            });
+            this.#ui_progress.addEventListener('mousedown', (e)=>{
+                if (e.target == timePointer) return false;
+                if (this.#songUrl)  return this.ui_setProgress(e);
+            });
+
+            // end song
+            this.#playerElement.addEventListener('ended', async ()=>{
+                playBtn.classList.add("pause");
+                if (this.#repeated == -1){
+                    playBtn.classList.remove("pause");
+                    this.#currentTime = 0;
+                    this.#playerElement.currentTime = this.#currentTime;
+                    this.#playerElement.play();
+                    return -1;
+                }
+                playBtn.classList.remove("pause");
+                this.nextSong()
+                return 1;
+            });
+
+            // main controls func
+            playBtn
+            .addEventListener("click", async (e)=>{
+                //return await this.play();
+                const status  = await this.play();
+                if (!status){
+                    return clearInterval(autoSaveFunc);
+                }
+                return autoSaveFunc = setInterval(autoSaveSetting,3000);
+            })
+            //shuffle
+            shuffleBtn
+            .addEventListener("click",(e)=>{
+                e.preventDefault();
+                if (!this.#shuffle){
+                    this.#shuffle = 1;
+                }else{
+                    this.#shuffle = 0;
+                }
+                this.ui_previousAndNextButton()
+                shuffleBtn.classList.toggle("btn--on");
+                return;
+            })
+            let repeatBtn = this.#musicPlayerElement.querySelector(".music-play-controls .repeat-btn")
+            //repeated
+            repeatBtn
+            .addEventListener("click",(e)=>{
+                e.preventDefault()
+                this.ui_previousAndNextButton();
+                if (!this.#repeated){
+                    this.#repeated++;
+                    repeatBtn.querySelector("svg:first-of-type").style.display = "none"
+                    repeatBtn.querySelector("svg:last-of-type").style.display = "inline"
+                    repeatBtn.classList.toggle("btn--on")
+                }
+                else if (this.#repeated == 1){
+                    this.#repeated = -1;
+                    repeatBtn.querySelector("svg:first-of-type").style.display = "inline"
+                    repeatBtn.querySelector("svg:last-of-type").style.display = "none"
+                }else{
+                    this.#repeated = 0;
+                    repeatBtn.querySelector("svg:first-of-type").style.display = "none"
+                    repeatBtn.querySelector("svg:last-of-type").style.display = "inline"
+                    repeatBtn.classList.toggle("btn--on");
+                }
+                this.ui_previousAndNextButton();
+                return ;
+            })
+            
+            let nextBtn = this.#musicPlayerElement.querySelector(".music-play-controls .next-btn")
+            // skip btn
+            nextBtn
+            .addEventListener("click", async(e)=>{
+                if (!this.#nextSong && !this.#shuffle){
+                    if (!this.#nextSong && !this.#repeated) return false;
+                }
+                const status = await this.nextSong();
+                if (!status){
+                    this.#playerElement.currentTime = this.#endTime;
+                }
+                return status;
+            })
+
+            // prev btn
+            let prevBtn = this.#musicPlayerElement.querySelector(".music-play-controls .previous-btn");
+            prevBtn
+            .addEventListener("click", async(e)=>{
+                if (!this.#prevSong || this.#shuffle) return false;
                 const status = await this.prevSong();
                 if (!status){
                     this.#playerElement.currentTime = 0;
                 }
                 return status;
-            }],
-            ['nexttrack', async () => { 
-                if (!this.#nextSong && !this.#shuffle){
-                    return false;
-                };
-                const status = await this.nextSong();
-                if (!status){
-                    this.#playerElement.currentTime = 0;
+            })
+        }
+
+        // utils
+        formatTime(input) {
+            const hours = Math.floor(input / 3600);
+            const minutes = Math.floor((input % 3600) / 60);
+            const seconds = Math.round(input % 60);
+            
+            const formattedTime = hours > 0 ? hours.toString().padStart(2, '0') + ':' +
+                                minutes.toString().padStart(2, '0') + ':' +
+                                seconds.toString().padStart(2, '0')
+                                : minutes.toString() + ':' +
+                                seconds.toString().padStart(2, '0');
+            return formattedTime;
+        }
+        //render HTML
+        ui_initTime(){
+            this.#musicPlayerElement.querySelector(".time-start").textContent = this.formatTime(this.#currentTime);
+            this.#musicPlayerElement.querySelector(".time-end").textContent = this.formatTime(this.#endTime);
+        }
+
+        ui_updateProgress(){
+            const percentWidth = (this.#currentTime / this.#playerElement.duration) * 100;
+            this.#ui_progress.querySelector(".current-progress").style.width = `${percentWidth}%`;
+            const t = this.formatTime(this.#currentTime);
+            this.#musicPlayerElement.querySelector(".time-start").textContent = t;
+        }
+
+        ui_setProgress(e) {
+            const width = e.offsetX;
+            const progress = e.currentTarget;
+            const progressBarWidth = (width / progress.clientWidth) * 100;
+            this.#ui_progress.querySelector(".current-progress").style.width = `${progressBarWidth}%`;
+            this.#playerElement.currentTime = (width * this.#endTime) / progress.clientWidth;
+        }
+
+        ui_initVolumeProgress (){
+            const vI = document.querySelector(".music-setting .volume-icon");
+            let progressBarWidth = this.#volume * 100;
+            this.#ui_volumeProgress.querySelector(".volume__current-progress").style.width = `${progressBarWidth}%`;
+            if (!this.#volume || this.#muted){
+                this.#muted = 1;
+                return vI.classList.add("muted");
+            }
+            if (this.#volume >= 0.5){
+                return vI.classList.add("loud");
+            }
+            return vI.classList.remove("loud");
+        }
+
+        ui_setVolumeProgress(e) {
+            const vI = document.querySelector(".music-setting .volume-icon");
+            const width = e.offsetX;
+            const vProgress = e.currentTarget;
+            let progressBarWidth = (width / vProgress.clientWidth) * 100;
+            this.#volume = width / vProgress.clientWidth;
+            if (progressBarWidth <= 6){
+                progressBarWidth = 0;
+                this.#volume = 0;
+            }else if(progressBarWidth >= 92){
+                progressBarWidth = 100;
+                this.#volume = 1;
+            }
+            this.#ui_volumeProgress.querySelector(".volume__current-progress").style.width = `${progressBarWidth}%`;
+            if (!this.#volume || this.#muted){
+                this.#muted = 1;
+                vI.classList.add("muted");
+            }
+            if (!this.#muted){
+                vI.classList.remove("muted");
+            }
+            if (this.#volume >= 0.5){
+                vI.classList.add("loud");
+                this.#muted = 0;
+            }
+            else {
+                this.#muted = 0;
+                vI.classList.remove("loud");
+            }
+            this.#playerElement.volume = this.#volume;
+        }
+
+        ui_previousAndNextButton(){
+            if (this.#nextSong || this.#shuffle || this.#repeated){ // if has next song
+                this.#musicPlayerElement.classList.remove("block-next");
+            }else{
+                this.#musicPlayerElement.classList.add("block-next");   
+            }
+            if (this.#prevSong && !this.#shuffle){ // if has prev song
+                return this.#musicPlayerElement.classList.remove("block-prev");
+            }
+            return this.#musicPlayerElement.classList.add("block-prev")
+        }
+
+        async ui_loadSong(songNode){
+            /* example = {
+                tokenURI : "Qqdxxxx",
+                artistAddress : "0x000",
+                artistName : "",
+                songName : "Just the Two of Us (feat. Bill Withers)",
+                audio : "/assets/mp3/justthetwoofus.mp3",
+                image : "/assets/",
+                cover_image : "/asdsad",
+                description : "hello"
+                playlistName : "Test"
+            } */
+            const songStructure = songNode.data;
+            if (!songNode || !songStructure) return false; 
+            this.#songUrl = baseUriReplace(songStructure.audio);
+            this.#playerElement.src = this.#songUrl;
+            this.#songAuthorElement.textContent = !songStructure.artistName ? songStructure.artistAddress : songStructure.artistName;
+            this.#songAuthorElement.setAttribute("href", `/artist/${songStructure.artistAddress}`);
+            this.#songNameElement.textContent = songStructure.name;
+            this.#songNameElement.setAttribute("href", `/song/${songStructure.tokenURI}`)
+            this.#songThumbnailElement.setAttribute("src", `${baseUriReplace(songStructure.image)}`); 
+            this.loadSongDuration().then(()=>{
+                this.ui_initTime();
+                this.createMediaSession(songStructure)
+                return true;
+            })
+            .catch(error=>{
+                console.log(error);
+                return false;
+            })
+        }
+
+        createMediaSession(songData){
+            if ("mediaSession" in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: songData.name,
+                    artist: songData.artistAddress,
+                    album: songData.playlistName || "",
+                    artwork: [
+                        { src: baseUriReplace(songData.image)},
+                        { src: baseUriReplace(songData.cover_image)},
+                    ]
+                });
+            }
+            const actionHandlers = [
+                ['play', async () => {
+                    return await this.play();
+                }],
+                ['pause', async () => {
+                    return await this.play();
+                }],
+                ['previoustrack', async () => {
+                    if (!this.#prevSong || this.#shuffle){
+                        this.#playerElement.currentTime = 0;
+                        return false;
+                    };
+                    const status = await this.prevSong();
+                    if (!status){
+                        this.#playerElement.currentTime = 0;
+                    }
+                    return status;
+                }],
+                ['nexttrack', async () => { 
+                    if (!this.#nextSong && !this.#shuffle){
+                        return false;
+                    };
+                    const status = await this.nextSong();
+                    if (!status){
+                        this.#playerElement.currentTime = 0;
+                    }
+                    return status;
+                }],
+                ['stop', async ()=>{
+                    return await this.play();
+                }],
+              ];
+            for (const [action, handler] of actionHandlers) {
+                try {
+                    navigator.mediaSession.setActionHandler(action, handler);
+                } catch (error) {
+                    console.log(`The media session action "${action}" is not supported yet.`);
                 }
-                return status;
-            }],
-            ['stop', async ()=>{
-                return await this.play();
-            }],
-          ];
-        for (const [action, handler] of actionHandlers) {
-            try {
-                navigator.mediaSession.setActionHandler(action, handler);
-            } catch (error) {
-                console.log(`The media session action "${action}" is not supported yet.`);
             }
         }
     }
-}
-const t = new MusicPlayer();
-const q = new SongQueue();
-async function App() {
+    const t = new MusicPlayer();
+    const q = new SongQueue();
     //await q.addPlaylistToQueue(fakeAPIList);
-    // const oldSetting = JSON.parse(window.localStorage.getItem("lastSetting")) || false;
-    // if (oldSetting){
-    //     t.startApp(q, oldSetting.currentTime, oldSetting.url, oldSetting.volume, oldSetting.shuffle, oldSetting.repeated)
-    // }else{
-    //     t.startApp(q)
-    // }
+    const oldSetting = JSON.parse(window.localStorage.getItem("lastSetting")) || false;
+    if (oldSetting){
+        t.startApp(q, oldSetting.currentTime, oldSetting.url, oldSetting.volume, oldSetting.shuffle, oldSetting.repeated)
+    }else{
+        t.startApp(q)
+    }
     const CONTRACT_HELPERS = {
         createMuzSong : async function (artistAddress, uri, publish, fee = 0){
             try {
@@ -1311,9 +1312,9 @@ async function App() {
                 console.log(error);
                 return false;
             })
-            .then( async(tokenList)=>{
-                await q.addPlaylistToQueue(tokenList);
+            .then( async (tokenList)=>{
                 if (!t.getCurrentSong) t.startApp(q)
+                await q.addPlaylistToQueue(tokenList);
                 for (const id in tokenList) {
                     if (Object.hasOwnProperty.call(tokenList, id)) {
                         const {

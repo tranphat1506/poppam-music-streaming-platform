@@ -13,7 +13,6 @@ global._STATUS_TIME = STATUS_TIME;
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
 app.set("views", "./views");
-app.use('/images', express.static('images'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 const cookieParser = require('cookie-parser');
