@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <title>PopPam</title>
+</head>
+<body>
+    <div id="header">
+        <div class="header__container">
+            <div class="header__nav logo__container header__logo-container flex-center">
+                <a href="#" class="redirect-link link--home">
+                    <span class="logo-icon">P</span>
+                    <span class="logo-text">oppam</span>
+                </a>
+            </div>
+            <div class="header__nav expand__container header__expand-container">
+                <svg onclick="openHeaderExpandMenu()" xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M480-331.999 226.434-585.565 283-642.131l197 198 197-197 56.566 56.566L480-331.999Z"/></svg>
+                <div class="wrapper expand-container__wrapper">
+                    <a class="wrapper-item playlist" href="#drops">   
+                        Drops & Events
+                    </a>
+                    <a class="wrapper-item upload" href="#upload" onclick="openCreatedForm()">
+                        Upload
+                    </a>
+                </div>
+            </div>
+            <div class="header__nav search__container header__search-container">
+                <div class="search-box">
+                    <div class="search-box__search-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48"><path d="M796 935 533 672q-30 26-69.959 40.5T378 727q-108.162 0-183.081-75Q120 577 120 471t75-181q75-75 181.5-75t181 75Q632 365 632 471.15 632 514 618 554q-14 40-42 75l264 262-44 44ZM377 667q81.25 0 138.125-57.5T572 471q0-81-56.875-138.5T377 275q-82.083 0-139.542 57.5Q180 390 180 471t57.458 138.5Q294.917 667 377 667Z"/></svg>
+                    </div>
+                    <input type="text" class="search-box__search-input" placeholder="Songs, artist, NFTs, events, ...">
+                </div>
+            </div>
+            <div class="header__nav wallet__container header__wallet-container">
+                <div class="wallet-box box">
+                    <div class="wallet-box__wallet-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M240-160q-66 0-113-47T80-320v-320q0-66 47-113t113-47h480q66 0 113 47t47 113v320q0 66-47 113t-113 47H240Zm0-470h480q29 0 54.5 9t45.5 26v-45q0-42-29-71t-71-29H240q-42 0-71 29t-29 71v45q20-17 45.5-26t54.5-9Zm-97 136 477 115q7 2 14.5.5T647-385l160-134q-13-23-36-37t-51-14H240q-35 0-62 21.5T143-494Z"/></svg>
+                    </div>
+                    <span class="connect-wallet_btn" value="MetaMask" class="wallet-box__title title" title="Click to connect wallet">Connect wallet</span>
+                </div>
+                <div class="user-box box">
+                    <div class="avatar" title="Menu">
+                        <img src="https://cdn.dribbble.com/users/4384322/screenshots/18722194/media/1a6f99d0c5dd8fa1ad1f75dcdff4d223.png?compress=1&resize=800x600&vertical=top" alt="User Avatar" srcset="">
+                    </div>
+                    <div class="wallet-address" title="Copy wallet address">0x00000000000000000000000000000000</div>
+                    <div class="balance-box" title="Balance">
+                        <span class="wallet-balance">...</span>
+                        <span class="wallet-symbol">XXX</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header__nav notification__container header__notification-container">
+                <div class="notification-container__notification-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M117-178v-95h93v-278q0-93.085 53.5-168.042Q317-794 407-814.417V-838q0-30.5 21.458-50.75Q449.917-909 480-909q30.083 0 51.542 20.25Q553-868.5 553-838v23.583Q644-794 698-719.542 752-645.085 752-551v278h92v95H117Zm363-316Zm.5 439q-35.45 0-61.975-25.85T392-143h177q0 37-26.231 62.5Q516.537-55 480.5-55ZM304-273h353v-278q0-74-51-126t-125-52q-74 0-125.5 52T304-551v278Z"/></svg>
+                    <span class="notification-status">2</span>
+                </div>
+            </div>
+            <div class="header__nav menu__container header__menu-container">
+                <div class="menu-container__menu-icon" onclick="openMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M110.391-224.173v-79.218h739.218v79.218H110.391Zm0-216.218v-79.218h739.218v79.218H110.391Zm0-216.218v-79.783h739.218v79.783H110.391Z"/></svg>
+                </div>
+                <div class="menu-container__wrapper">
+                    <div class="blur-bg"></div>
+                    <div class="container">
+                        <div class="menu account__menu">
+                            <div class="wallet-box box">
+                                <div class="wallet-box__wallet-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M240-160q-66 0-113-47T80-320v-320q0-66 47-113t113-47h480q66 0 113 47t47 113v320q0 66-47 113t-113 47H240Zm0-470h480q29 0 54.5 9t45.5 26v-45q0-42-29-71t-71-29H240q-42 0-71 29t-29 71v45q20-17 45.5-26t54.5-9Zm-97 136 477 115q7 2 14.5.5T647-385l160-134q-13-23-36-37t-51-14H240q-35 0-62 21.5T143-494Z"/></svg>
+                                </div>
+                                <span class="connect-wallet_btn" value="MetaMask" class="wallet-box__title title" title="Click to connect wallet">Connect wallet</span>
+                            </div>
+                            <div class="user-box box">
+                                <div class="avatar" title="Menu">
+                                    <img src="https://cdn.dribbble.com/users/4384322/screenshots/18722194/media/1a6f99d0c5dd8fa1ad1f75dcdff4d223.png?compress=1&resize=800x600&vertical=top" alt="User Avatar" srcset="">
+                                </div>
+                                <div class="balance-box" title="Balance">
+                                    <span class="wallet-balance">...</span>
+                                    <span class="wallet-symbol">XXX</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="menu account__more">
+                            <div class="wallet-address-detail">
+                                <div class="wallet-address" title="Copy wallet address">0x00000000000000000000000000000000</div>
+                                <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M180-81q-24 0-42-18t-18-42v-603h60v603h474v60H180Zm120-120q-24 0-42-18t-18-42v-560q0-24 18-42t42-18h440q24 0 42 18t18 42v560q0 24-18 42t-42 18H300Zm0-60h440v-560H300v560Zm0 0v-560 560Z"/></svg>
+                            </div>
+                        </div>
+                        <div class="sub-container custom-scroll-bar">
+                            <div class="menu profile-link">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M480-481q-66 0-108-42t-42-108q0-66 42-108t108-42q66 0 108 42t42 108q0 66-42 108t-108 42ZM160-160v-94q0-38 19-65t49-41q67-30 128.5-45T480-420q62 0 123 15.5T731-360q31 14 50 41t19 65v94H160Z"/></svg>
+                                <a href="#/me" class="link">Profile</a>
+                            </div>
+                            <div class="menu drops-link">         
+                                <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M180-80q-24 0-42-18t-18-42v-620q0-24 18-42t42-18h65v-60h65v60h340v-60h65v60h65q24 0 42 18t18 42v620q0 24-18 42t-42 18H180Zm0-60h600v-430H180v430Z"/></svg>
+                                <a href="#/drops" class="link">Drops & Events</a>
+                            </div>
+                            <div class="menu marketplace-link">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M179-120q-24 0-42-18t-18-42v-339q-28-24-37-59t2-70l43-135q8-27 28-42t46-15h553q28 0 49 15.5t29 41.5l44 135q11 35 1.5 70T840-519v339q0 24-18 42t-42 18H179Zm391-430q29 0 49-19t16-46l-25-165H510v165q0 26 17 45.5t43 19.5Zm-187 0q28 0 47.5-19t19.5-46v-165H350l-25 165q-4 26 14 45.5t44 19.5Zm-182 0q24 0 41.5-16.5T263-607l26-173H189l-46 146q-10 31 8 57.5t50 26.5Zm557 0q32 0 50.5-26t8.5-58l-46-146H671l26 173q3 24 20.5 40.5T758-550Z"/></svg>
+                                <a href="#/marketplace" class="link">P2P Marketplace</a>
+                            </div>
+                            <div class="menu friends-link">         
+                                <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M38-160v-94q0-35 18-63.5t50-42.5q73-32 131.5-46T358-420q62 0 120 14t131 46q32 14 50.5 42.5T678-254v94H38Zm700 0v-94q0-63-32-103.5T622-423q69 8 130 23.5t99 35.5q33 19 52 47t19 63v94H738ZM358-481q-66 0-108-42t-42-108q0-66 42-108t108-42q66 0 108 42t42 108q0 66-42 108t-108 42Zm360-150q0 66-42 108t-108 42q-11 0-24.5-1.5T519-488q24-25 36.5-61.5T568-631q0-45-12.5-79.5T519-774q11-3 24.5-5t24.5-2q66 0 108 42t42 108Z"/></svg>
+                                <a href="#/friends" class="link">Friends</a>
+                            </div>
+                            <div class="menu help-link">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="m515-80-10-110h-40q-143 0-244-101T120-535q0-143 101.5-244T467-880q71 0 131.5 25.5T704-783q45 46 70.5 108.5T800-538q0 66-19.5 132T724-280q-37 60-90 111T515-80Zm-48-223q16 0 27-11t11-27q0-16-11-27t-27-11q-16 0-27 11t-11 27q0 16 11 27t27 11Zm-27-136h50q0-25 8.5-41.5T534-524q27-27 38-49.5t11-48.5q0-45-30.5-74T471-725q-42 0-75 22t-49 60l46 19q11-26 30.5-38.5T468-675q30 0 47 14.5t17 38.5q0 19-11 38.5T482-535q-27 28-34.5 45t-7.5 51Z"/></svg>
+                                <a href="#/help" class="link">Help Center</a>
+                            </div>
+                            <div class="menu setting">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="m388-80-20-126q-19-7-40-19t-37-25l-118 54-93-164 108-79q-2-9-2.5-20.5T185-480q0-9 .5-20.5T188-521L80-600l93-164 118 54q16-13 37-25t40-18l20-127h184l20 126q19 7 40.5 18.5T669-710l118-54 93 164-108 77q2 10 2.5 21.5t.5 21.5q0 10-.5 21t-2.5 21l108 78-93 164-118-54q-16 13-36.5 25.5T592-206L572-80H388Zm92-270q54 0 92-38t38-92q0-54-38-92t-92-38q-54 0-92 38t-38 92q0 54 38 92t92 38Z"/></svg>
+                                <span class="title">Setting</span>
+                            </div>
+                            <div class="menu language">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M480-80q-84 0-157-31.5T196-197q-54-54-85-127.5T80-482q0-84 31-156.5T196-765q54-54 127-84.5T480-880q84 0 157 30.5T764-765q54 54 85 126.5T880-482q0 84-31 157.5T764-197q-54 54-127 85.5T480-80Zm0-58q35-36 58.5-82.5T577-331H384q14 60 37.5 108t58.5 85Zm-85-12q-25-38-43-82t-30-99H172q38 71 88 111.5T395-150Zm171-1q72-23 129.5-69T788-331H639q-13 54-30.5 98T566-151ZM152-391h159q-3-27-3.5-48.5T307-482q0-25 1-44.5t4-43.5H152q-7 24-9.5 43t-2.5 45q0 26 2.5 46.5T152-391Zm221 0h215q4-31 5-50.5t1-40.5q0-20-1-38.5t-5-49.5H373q-4 31-5 49.5t-1 38.5q0 21 1 40.5t5 50.5Zm275 0h160q7-24 9.5-44.5T820-482q0-26-2.5-45t-9.5-43H649q3 35 4 53.5t1 34.5q0 22-1.5 41.5T648-391Zm-10-239h150q-33-69-90.5-115T565-810q25 37 42.5 80T638-630Zm-254 0h194q-11-53-37-102.5T480-820q-32 27-54 71t-42 119Zm-212 0h151q11-54 28-96.5t43-82.5q-75 19-131 64t-91 115Z"/></svg>
+                                <span class="title">Language</span>
+                                <span class="current-language">en</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="m375-240-43-43 198-198-198-198 43-43 241 241-241 241Z"/></svg>
+                            </div>
+                            <div class="menu darkmode">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q8 0 17 .5t23 1.5q-36 32-56 79t-20 99q0 90 63 153t153 63q52 0 99-18.5t79-51.5q1 12 1.5 19.5t.5 14.5q0 150-105 255T480-120Z"/></svg>
+                                <span class="title">Dark Mode</span>
+                                <span class="toggle-icon on">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M280-240q-100 0-170-70T40-480q0-100 70-170t170-70h400q100 0 170 70t70 170q0 100-70 170t-170 70H280Zm-1.059-139Q321-379 350.5-408.441t29.5-71.5Q380-522 350.559-551.5t-71.5-29.5Q237-581 207.5-551.559t-29.5 71.5Q178-438 207.441-408.5t71.5 29.5Z"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M280-240q-100 0-170-70T40-480q0-100 70-170t170-70h400q100 0 170 70t70 170q0 100-70 170t-170 70H280Zm400.941-139Q723-379 752.5-408.441t29.5-71.5Q782-522 752.559-551.5t-71.5-29.5Q639-581 609.5-551.559t-29.5 71.5Q580-438 609.441-408.5t71.5 29.5Z"/></svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div id="main">
+        <div class="blur-slide">
+            <div class="blur"></div>
+        </div>
+        <div class="slider">
+        </div>
+    </div>
+    <div id="sidebar">
+        <div class="expand-menu">
+            <div class="expand-playlist">
+                <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M480-345 240-585l43-43 197 198 197-197 43 43-240 239Z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="m283-345-43-43 240-240 240 239-43 43-197-197-197 198Z"/></svg>
+            </div>
+        </div>
+        <div class="sidebar__container">
+            <div class="container">
+                <div class="top-container">
+                    <div class="my-lib">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M486-333q41 0 70-28.5t29-69.5v-252h116v-60H545v237q-11-9-26.5-14t-32.5-5q-39 0-66 27.5T393-431q0 40 27 69t66 29ZM260-200q-24 0-42-18t-18-42v-560q0-24 18-42t42-18h560q24 0 42 18t18 42v560q0 24-18 42t-42 18H260ZM140-80q-24 0-42-18t-18-42v-620h60v620h620v60H140Z"/></svg>
+                        <span class="title">My Library</span>
+                    </div>
+                    <div class="create-playlist">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M450-200v-250H200v-60h250v-250h60v250h250v60H510v250h-60Z"/></svg>
+                    </div>
+                    <div class="search-playlist">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48"><path d="M796 935 533 672q-30 26-69.959 40.5T378 727q-108.162 0-183.081-75Q120 577 120 471t75-181q75-75 181.5-75t181 75Q632 365 632 471.15 632 514 618 554q-14 40-42 75l264 262-44 44ZM377 667q81.25 0 138.125-57.5T572 471q0-81-56.875-138.5T377 275q-82.083 0-139.542 57.5Q180 390 180 471t57.458 138.5Q294.917 667 377 667Z"/></svg>
+                    </div>
+                </div>
+                <div class="sort-by">
+                    <div class="item sort-by--playlist">
+                        Playlist
+                    </div>
+                    <div class="item sort-by--album">
+                        Album
+                    </div>
+                    <div class="item sort-by--artist">
+                        Artist
+                    </div>
+                </div>
+            </div>
+            <div class="input-box container">
+                <div class="input search">
+                    <div class="search-type">
+                        All
+                    </div>
+                    <input type="text" placeholder=":artist/ To find artist">
+                    <div class="btn">Find</div>
+                </div>
+                <div class="input create">
+                    <input type="text" placeholder="type a name for your playlist">
+                    <div class="btn">Create</div>
+                </div>
+            </div>
+            <div class="display-playlist container custom-scroll-bar">
+                <div class="playlist-list main-playlist">
+                    <div class="playlist-item type--playlist" data-url="likedsong">
+                        <div class="poster-img">
+                            <img src="./assets/img/justthetwoofus.jpg" alt="My liked songs playlist">
+                        </div>
+                        <div class="info-playlist">
+                            <div class="title">
+                                Loved Songs
+                            </div>
+                            <div class="detail-playlist">
+                                <div class="type">Playlist</div>
+                                <div class="sub-type">10 songs</div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="playlist-list search-playlist">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer">
+        <div class="footer__container">
+            <div id="music-player" class="off">
+                <div class="music-poster">
+                    <div class="poster">
+                        <img src="" alt="music poster">
+                    </div>
+                    <div class="music-detail">
+                        <a class="title" href="#link">
+                        </a>
+                        <a class="music-by" href="#artist">
+                        </a>
+                    </div>
+                    <div class="music-love" onclick="loveMusic()">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="m479-87-58-52Q312-239 241.5-311.5T129-441.5q-42-57.5-58.5-105T54-643q0-101 67.5-169T289-880q56 0 104 24t86 71q44-50 90-72.5T669-880q101 0 169 68t68 169q0 49-16.5 96T831-442.5Q789-385 718-312T538-139l-59 52Z"/></svg>
+                    </div>
+                </div>
+                <div class="music-main">
+                    <div class="music-play-controls">
+                        <div class="btn shuffle-btn" title="Enable shuffle">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M585.615-175.384v-30.77h143.462L548.923-386.077l21.231-22.231L750-228.923v-141.616h30.769v195.155H585.615Zm-384.384-7.693-22-22.231L728-754.077H585.615v-30.769h195.154v194.385H750v-141.385L201.231-183.077Zm181.461-370.154L180-755.692l21.461-21.462 203.462 202.462-22.231 21.461Z"/></svg>
+                        </div>
+                        <div class="btn previous-btn" title="Previous">
+                             <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M173-193v-574h94v574h-94Zm614 0L370-480l417-287v574Z"/></svg>
+                        </div>
+                        <div class="btn play-btn" title="Play">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M295-157v-652l512 326-512 326Z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M555-200v-560h175v560H555Zm-325 0v-560h175v560H230Z"/></svg>
+                        </div>
+                        <div class="btn next-btn" title="Next">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M693-193v-574h94v574h-94Zm-520 0v-574l417 287-417 287Z"/></svg>
+                        </div>
+                        <div class="btn repeat-btn" title="Enable repeat">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M287.692-115.384 155.384-247.692 287.692-380l22 22.462-94.461 94.461h486.307v-160h30.77v190.769H215.231l94.461 94.462-22 22.462Zm187.539-258.154v-183.616h-46v-30.538h76.538v214.154h-30.538ZM227.692-536.923v-190.769h517.077l-94.461-94.462 22-22.462 132.308 132.308L672.308-580l-22-22.462 94.461-94.461H258.462v160h-30.77Z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M287.692-115.384 155.384-247.692 287.692-380l22 22.462-94.461 94.461h486.307v-160h30.77v190.769H215.231l94.461 94.462-22 22.462Zm-60-421.539v-190.769h517.077l-94.461-94.462 22-22.462 132.308 132.308L672.308-580l-22-22.462 94.461-94.461H258.462v160h-30.77Z"/></svg>
+                        </div>
+                    </div>
+                    <div class="music-timeline">
+                        <div class="item time-start">0:00</div>
+                        <div class="item progress-bar">
+                            <div class="current-progress">
+                                <div class="pointer"></div>
+                            </div>
+                        </div>
+                        <div class="item time-end">0:00</div>
+                    </div>
+                </div>
+                <div class="music-setting">
+                    <div class="volume-setting">
+                        <span class="volume-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M580-118v-75.204Q676-222 738-301t62-180q0-101-61.5-180.5T580-768.796V-844q128.229 28.749 209.614 130.374Q871-612 871-481t-81.386 232.626Q708.229-146.749 580-118ZM89-335v-291h175l236-235v762L264-335H89Zm471 32v-355q58 20 94.5 68.078 36.5 48.079 36.5 109.99Q691-419 654-370.5T560-303Z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M169-335v-291h175l236-235v762L344-335H169Zm471 32v-355q58 19 94.5 68.5T771-480q0 61-36.5 109T640-303Z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M821-32 687-167q-25 17-54 29.5T572-118v-75q16-5 32.5-11t30.5-17L492-367v268L257-335H82v-291h157L24-846l50-50L872-84l-51 52Zm-17-248-51-53q20-33 29.5-70.5T792-481q0-103-61-184T572-769v-75q128 29 210 130.5T864-481q0 54-15.5 105T804-280ZM671-415l-99-101v-135q50 24 81 70t31 101q0 17-3.5 33.5T671-415ZM492-598 362-731l130-130v263Z"/></svg>
+                        </span>
+                        <div class="volume__progress-bar">
+                            <div class="volume__current-progress">
+                                <div class="pointer"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item playlist-show">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M646.118-121Q588-121 546-161.559q-42-40.559-42-97 0-57.941 40.542-98.191Q585.083-397 642-397q12.1 0 25.1 2.375 13 2.375 24.9 6.625v-385h229v105H787v409.585q0 56.915-41.091 97.165Q704.819-121 646.118-121ZM103-302v-95h323v95H103Zm0-189v-94h484v94H103Zm0-188v-94h484v94H103Z"/></svg>
+                    </div>
+                    <div class="item sleep-mode">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M482.705-65Q396-65 319.919-98.1q-76.082-33.1-132.9-89.919-56.819-56.818-89.919-132.9Q64-397 64-483.702q0-155.744 100.5-272.521Q265-873 417-900q-12 101 14.5 198T531-533q71 72 168.5 98.5T898-415q-26 151-142.773 250.5T482.705-65ZM740-617l-51.188-113.812L576-781l112.812-51.188L740-945l49.875 112.812L903-781l-113.125 50.188L740-617Z"/></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="created-form" class>
+        <div class="form__container custom-scroll-bar">
+            <div class="exit-btn" onclick="openCreatedForm()">
+                X
+            </div>
+            <div class="form">
+                <div class="title"></div>
+                <div class="title sub--title"></div>
+                <div class="type-choose">
+                    <div class="type--album" onclick="createAlbum()">
+                        <div class="type__icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M480-316q70 0 120-47.5T650-480q0-71-49.5-120.5T480-650q-69 0-116.5 50T316-480q0 69 47.5 116.5T480-316Zm0-124q-17 0-28.5-11.5T440-480q0-17 11.5-28.5T480-520q17 0 28.5 11.5T520-480q0 17-11.5 28.5T480-440Zm.138 385Q392-55 314.513-88.084q-77.488-33.083-135.417-91.012T88.084-314.375Q55-391.724 55-479.862 55-569 88.084-646.487q33.083-77.488 90.855-134.969 57.772-57.482 135.195-91.013Q391.557-906 479.779-906q89.221 0 166.827 33.454 77.605 33.453 135.012 90.802 57.407 57.349 90.895 134.877Q906-569.34 906-480q0 88.276-33.531 165.747-33.531 77.471-91.013 135.278-57.481 57.808-134.831 90.891Q569.276-55 480.138-55Z"/></svg>
+                        </div>
+                        <div class="type__description">
+                            Create a new MUZ Album .
+                        </div>
+                    </div>
+                    <div class="type--song" onclick="createSong()">
+                        <div class="type__icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M398.118-237Q449-237 484-272.583q35-35.584 35-86.417v-306h122v-60H474v266q-17-10-36.5-16t-39.5-6q-50.833 0-86.417 36.118-35.583 36.117-35.583 86Q276-308 311.618-272.5q35.617 35.5 86.5 35.5Zm82.286 182q-88.872 0-166.125-33.084-77.254-33.083-135.183-91.012-57.929-57.929-91.012-135.119Q55-391.406 55-480.362q0-88.957 33.084-166.285 33.083-77.328 90.855-134.809 57.772-57.482 135.036-91.013Q391.238-906 480.279-906q89.04 0 166.486 33.454 77.446 33.453 134.853 90.802 57.407 57.349 90.895 134.877Q906-569.34 906-480.266q0 89.01-33.531 166.247-33.531 77.237-91.013 134.86-57.481 57.623-134.831 90.891Q569.276-55 480.404-55Z"/></svg>
+                        </div>  
+                        <div class="type__description">
+                            Create a new Muz Song .
+                        </div>
+                    </div>
+                </div>
+                <div class="created" data-type="song">
+                    <div class="top-box">
+                        <div class="upload-file cover-poster-upload">
+                            <input accept="image/*" type="file" name="cover-img" id="cover-img-file">
+                            <span class="poster-title">NFT Cover Image</span>
+                            <label class="onhover--title" for="cover-img-file">Upload</label>
+                            <img src="#" class="poster-preview" alt="nft cover image">
+                        </div>
+                    </div>
+                    <div class="under-box">
+                        <div class="upload-file left-box poster-upload">
+                            <input accept="image/*" type="file" name="poster" id="poster-file">
+                            <span class="poster-title">NFT Poster</span>
+                            <label class="onhover--title" for="poster-file">Upload</label>
+                            <img src="#" class="poster-preview" alt="inft poster image">
+                        </div>
+                        <div class="right-box">
+                            <input type="text" name="name" id="input-name" class="created-input" title="NFT name" >
+                            <textarea name="description" id="input-description" class="created-input" title="NFT description" ></textarea>
+                            <div class="upload-file audio-upload created-input">
+                                <span class="poster-title audio-title">NFT Audio</span>
+                                <label class="onhover--title" for="audio-file">Upload Audio</label>
+                                <input type="file" name="audio" id="audio-file" accept="audio/*">
+                            </div>
+                            <label for="publish-choose">
+                                <span class="publish-choose__title">Publish: </span>
+                                <input type="checkbox" name="publish" id="publish-choose" value="1">
+                            </label>
+                            <button class="created-btn" onclick="createBtn()">
+                                <span class="title-btn">Create</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" overflow="visible" fill="#4d4ba1" stroke="#4d4ba1"><defs><polygon id="loader" points="20,40 28,55 12,55" /></defs><use xlink:href="#loader" transform="rotate(0 50 50)"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0s" repeatCount="indefinite"></animate></use><use xlink:href="#loader" transform="rotate(45 50 50)"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.125s" repeatCount="indefinite"></animate></use><use xlink:href="#loader" transform="rotate(90 50 50)"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.25s" repeatCount="indefinite"></animate></use><use xlink:href="#loader" transform="rotate(135 50 50)"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.375s" repeatCount="indefinite"></animate></use><use xlink:href="#loader" transform="rotate(180 50 50)"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.5s" repeatCount="indefinite"></animate></use><use xlink:href="#loader" transform="rotate(225 50 50)"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.625s" repeatCount="indefinite"></animate></use><use xlink:href="#loader" transform="rotate(270 50 50)"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.75s" repeatCount="indefinite"></animate></use><use xlink:href="#loader" transform="rotate(315 50 50)"><animate attributeName="opacity" values="0;1;0" dur="1s" begin="0.875s" repeatCount="indefinite"></animate></use></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+        type="application/javascript"></script>
+    <script src="./assets/js/main.js"></script>
+</body>
+</html>

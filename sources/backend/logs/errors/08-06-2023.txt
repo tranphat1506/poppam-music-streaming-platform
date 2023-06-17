@@ -1,0 +1,4 @@
+08-06-2023	12:42:05 GMT+7	e8281d67-b4a2-43f7-b7a8-7c85564ec070	POST	http://127.0.0.1:5501	/api/song/create	Error: Not allowed by CORS
+08-06-2023	12:42:28 GMT+7	53857c01-cb8a-4d49-9cd9-f1e69cde2644	POST	http://localhost:5501	/api/song/create	Error: Not allowed by CORS
+08-06-2023	12:42:50 GMT+7	2fe49386-8b93-4c28-bd8a-7f8c986159cd	POST	http://localhost:5501	/api/song/create	Error: Not allowed by CORS
+08-06-2023	13:49:38 GMT+7	17fcc84c-1687-4d79-9231-1f6fcb5f5537	POST	http://localhost:5501	/api/song/create	Error: Not allowed by CORS

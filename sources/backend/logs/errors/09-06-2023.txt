@@ -1,0 +1,8 @@
+09-06-2023	06:42:36 GMT+7	68004e9e-9c1c-4160-a1eb-f0bb58b921c6	POST	http://127.0.0.1:5501	/auth/signUp	SyntaxError: "[object Object]" is not valid JSON
+09-06-2023	06:44:03 GMT+7	5fd4f71d-1257-4ad3-af64-b33cbecf7f64	POST	http://127.0.0.1:5501	/auth/signUp	SyntaxError: "[object Object]" is not valid JSON
+09-06-2023	06:45:17 GMT+7	f1a1896b-6286-42f1-82ba-ea888d28f85c	POST	http://127.0.0.1:5501	/auth/signUp	SyntaxError: "[object Object]" is not valid JSON
+09-06-2023	06:45:24 GMT+7	544df23d-e7dd-47b2-ad45-bc51a85dfec9	POST	http://127.0.0.1:5501	/auth/signUp	SyntaxError: "[object Object]" is not valid JSON
+09-06-2023	06:45:53 GMT+7	45f853cf-711b-4a3d-9ea4-b43404e666e4	POST	http://localhost:5501	/auth/signUp	SyntaxError: "[object Object]" is not valid JSON
+09-06-2023	06:46:38 GMT+7	683fac1a-abdf-45e1-818d-beceb519deee	POST	http://localhost:5501	/auth/signUp	SyntaxError: "[object Object]" is not valid JSON
+09-06-2023	06:49:39 GMT+7	5d52456b-7f58-4e1e-af39-0dd10f371e39	POST	http://localhost:5501	/auth/signUp	SyntaxError: "[object Object]" is not valid JSON
+09-06-2023	06:49:43 GMT+7	701913cb-9f8a-433d-8128-2ee4b96da7d3	POST	http://localhost:5501	/auth/signUp	SyntaxError: "[object Object]" is not valid JSON

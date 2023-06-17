@@ -1,0 +1,11 @@
+{
+  "name": "muzik-project",
+  "version": "0.1.0",
+  "description": "Web3 about music",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT"
+}

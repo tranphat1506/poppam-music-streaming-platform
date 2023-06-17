@@ -1,0 +1,4 @@
+.env
+.env_dev
+.end_prod
+node_modules/
