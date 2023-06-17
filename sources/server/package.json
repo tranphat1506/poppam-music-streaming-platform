@@ -4,7 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "dev": "npx nodemon -e js,ejs,html,css -w . -w public -w views -w routes -w models -w css server.js"
+    "dev": "npx nodemon -e js,ejs,html,css -w . -w public -w views -w routes -w models -w css server.js",
+    "build-dev": "webpack --mode development --config webpack.config.js",
+    "build-prod": "webpack --mode production --config webpack.config.js"
   },
   "author": "",
   "license": "ISC",
