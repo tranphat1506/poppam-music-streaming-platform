@@ -2,7 +2,7 @@
 # poppam-music-streaming-platform
 PopPam is a music streaming platform and a decentralized music distribution platform that allows artists to storage, release their music through NFTs. 
 # RUN
-FE : cd ./source/server && npm install && npm run build prod && npx ./build/bundle.js <br/>
-BE : cd ./source/backend && npm install && npm run build prod && npx ./build/bundle.js
+FE : cd ./source/server && npm install && npm run build prod && node ./build/bundle.js <br/>
+BE : cd ./source/backend && npm install && npm run build prod && node ./build/bundle.js
 
 # HIU-FRESHER
