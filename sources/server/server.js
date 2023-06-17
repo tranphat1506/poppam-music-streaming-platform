@@ -26,6 +26,5 @@ server.listen(PORT, ()=>{
     : false;
     console.log(`Server run on PORT ${PORT}`)
 })
-
 const Router = require('./src/routers/routers')
 app.use(Router)
