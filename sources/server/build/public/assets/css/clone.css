@@ -1,0 +1,775 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+@font-face {
+    font-family: 'default';
+    src: url('/assets/font/VarelaRound-Regular.ttf');
+}
+@font-face {
+    font-family: 'logo';
+    src: url('/assets/font/PermanentMarker-Regular.ttf');
+}
+:root{
+    --white : #fff;
+    --blue-main : rgb(148, 147, 255);
+}
+body{
+    font-family: 'default', sans-serif;
+    background-size: contain;
+    height: 100vh;
+    background-image: linear-gradient(to right bottom, #7bf2e9, #24d8fb, #33b8ff, #828fef, #b65eba);
+}
+#header{
+    position: fixed;
+    width: 100vw;
+}
+.header__container{
+    color: var(--white);
+    width: 100%;
+    height: 80px;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-evenly;
+}
+
+.logo__container{
+    font-family: 'default', sans-serif;
+    font-family: 'logo', sans-serif;
+    margin: 15px 20px !important;
+    width: 150px;
+}
+.flex-center{
+    display: flex;
+    display: -webkit-flex;
+    justify-content: center;
+}
+.link--home{
+    color: #ffc3fd;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+.logo__container .logo-icon{
+    font-size: 50px;
+}
+.logo__container .logo-text{
+    font-size: 30px;
+    padding-right: 20px;
+    border-right: 1px solid rgb(201, 201, 201);
+}
+.redirect-link{
+    text-decoration: none;
+}
+.expand__container{
+    justify-content: center;
+    align-items: center;
+}
+.expand__container svg{
+    display: none;
+    height: 30px;
+    width: 30px;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.expand-container__wrapper{
+    display: flex;
+    display: -webkit-flex;
+    justify-content: center;
+    align-items: center;
+    height: 48px;
+}
+.wrapper-item{
+    text-decoration: none;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    margin-right: 20px;
+    width: max-content;
+    font-weight: 700;
+}
+.wrapper-item:last-of-type{
+    margin: 0;
+}
+.wrapper-item:hover, .wrapper-item:active{
+    opacity: 85%;
+}
+.search__container{
+    width: 100%;
+}
+.search-box{
+    display: flex;
+    display: -webkit-flex;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.11);
+    height: 30px;
+    padding: 10px;
+    border-radius: 17px;
+    align-items: center;
+    justify-content: center;
+}
+.search-box:active, .search-box:hover, 
+.wallet-box:active, 
+.user-box:active, .user-box:hover,
+.is-login .user-box div:active,
+.notification-container__notification-icon:hover,
+.notification-container__notification-icon:active,
+.menu-container__menu-icon:active,
+.expand__container svg:active{
+    background-color: rgba(0, 0, 0, 0.239) !important;
+    cursor: pointer;
+}
+.search-box__search-icon{
+    display: inline-block;
+    padding: 4px;
+}
+svg {
+    fill: #fff;
+}
+.wallet-box__wallet-icon{
+    height: 30px;
+}
+.wallet-box__wallet-icon svg{
+    height: 30px;
+    width: 30px;
+}
+.search-box__search-icon svg{
+    width: 24px;
+    height: 24px;
+}
+input{
+    font-family: 'default', sans-serif;
+    width: 100%;
+}
+input::placeholder{
+    color: inherit;
+    font-size: 15px;
+}
+.search-box__search-input{
+    font-size: 15px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0);
+    color: #fff;
+}
+.search-box__search-input:focus{
+    outline: none;
+}
+.header__nav{
+    display: inline-flex;
+    display: -webkit-inline-flex;
+    margin: 15px 20px;
+}
+.wallet-box{
+    width: 70%;
+    display: inline-flex;
+    display: -webkit-inline-flex;
+    align-items: center;
+    padding: 0 10px;
+    border-right: 1px solid rgb(201, 201, 201);
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+.wallet__container{
+    align-items: center;
+}
+.wallet-box__title{
+    font-size: 15px;
+    margin: 0 10px;
+    width: auto;
+}
+.wallet__container .box{
+    background-color: rgba(0, 0, 0, 0.11);
+    height: 51px;
+}
+.user-box{
+    user-select: none;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    width: 65px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+.user-box div{
+    height: 100%;
+    line-height: 51px;
+}
+.user-box div:last-child{
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+.user-box div:first-child{
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+.user-box .avatar{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+}
+.user-box .avatar img{
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    user-drag: none;  
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+.is-login.wallet__container .wallet-box{
+    transition: all 700ms;
+}
+.is-login.wallet__container .user-box{
+    transition: all 2s;
+}
+.wallet__container.is-login .wallet-box .wallet-box__wallet-icon,
+.wallet__container.is-login .wallet-box .wallet-box__title
+{
+    display: none;
+}
+.wallet__container.is-login .wallet-box{
+    width: 0% !important;
+    height: 0% !important;
+    padding: 0;
+    border-right: none;
+}
+.wallet__container.is-login .user-box{
+    width: 100% !important;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.wallet-address, .balance-box{
+    display: none;
+}
+.wallet__container.is-login .balance-box{
+    display: inline-flex;
+    width: auto;
+}
+.wallet__container.is-login .wallet-address{
+    display: inline-block;
+    cursor: copy !important;
+}
+.wallet__container.is-login .balance-box{
+}
+.balance-box{
+    padding: 0 10px;
+}
+.balance-box .wallet-symbol{
+    display: inline-block;
+}
+.wallet__container.is-login .balance-box .wallet-balance{
+    width: 100%;
+}
+
+.balance-box .wallet-balance{
+    display: inline-block;
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
+.balance-box span:first-of-type{
+    margin-right: 3px;
+}
+.wallet__container.is-login .wallet-address{
+    width: 150px;
+    padding: 0 10px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    border-left: 1px solid rgb(201, 201, 201);
+    border-right: 1px solid rgb(201, 201, 201);
+
+}
+.wallet-box__wallet-icon{
+    transition: inherit
+}
+.is-login .user-box:active, .is-login .user-box:hover{
+    background-color: rgba(0, 0, 0, 0.11) !important;
+}
+
+@-webkit-keyframes spin {
+	0% { -webkit-transform: rotate(0deg); }
+	100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+#connect-wallet_btn{
+    user-select: none;
+}
+#connect-wallet_btn svg{
+    display: block;
+	width: 35px;
+	height: 35px;
+    fill: #fff;
+    stroke: #fff;
+}
+
+.header__notification-container,
+.header__menu-container{
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-container__notification-icon,
+.menu-container__menu-icon{
+    width: 30px;
+    height: 30px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.11);
+    border-radius: 15px;
+}
+
+.notification-container__notification-icon svg,
+.menu-container__menu-icon svg{
+    width: 30px;
+    height: 30px;
+}
+
+.notification-status{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ff4a4a;
+    width: 15px;
+    height: 15px;
+    font-size: 11px;
+    border-radius: 100%;
+    color: #ffffff;
+    position: relative;
+    bottom: 37px;
+    left: 18px;
+}
+.music-poster{
+    margin: 0 15px;
+    height: 90px;
+    width: auto;
+    min-width: 300px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.poster {
+    display: inline-block;
+    height: 70px;
+    width: 70px;
+    background-color: #fff;
+    border-radius: 7px;
+    color: #333;
+}
+.poster img{
+    user-drag: none;  
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 7px;
+}
+.music-detail{
+    margin-left: 10px;
+}
+.music-detail a{
+    display: block;
+    color: #fff;
+    text-decoration: none;
+}
+.music-detail a:first-child{
+    margin-bottom: 7px;
+}
+.music-detail .title{
+    user-select: none;
+    font-size: 15px;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
+.music-detail .music-by{
+    user-select: none;
+    font-size: 12px;
+    color: #cccccc;
+}
+#footer{
+    bottom: 0;
+    position: fixed;
+    width: 100vw;
+}
+.footer__container{
+    user-drag: none;  
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: -1;
+    background-color: #3e3e3e;
+    width: 100%;
+    height: 90px;
+}
+.music-love{
+    margin-left: 10px;
+    width: 20px;
+    height: 20px;
+}
+.music-love:active{
+    transform: scale(1.3);
+}
+.music-love svg{
+    width: 100%;
+    height: 100%;
+}
+.music-love.love svg{
+    fill: #ff5757;
+}
+#music-player{
+    display: flex;
+    color: #fff;
+    height: 90px;
+    justify-content: space-between;
+}
+.music-main{
+    display: block;
+    margin: auto 0;
+}
+
+.music-timeline{
+    display: flex;
+    align-items: center;
+}
+.music-timeline .progress-bar,
+.music-timeline .progress-bar .current-progress{
+    display: inline-flex;
+    align-items: center;
+    height: 5px;
+    cursor: pointer;
+    border-radius: 2px;
+}
+.time-start, .time-end{
+    margin: 0 10px;
+}
+.music-timeline .progress-bar{
+    background-color: #777;
+    width: 500px;
+}
+.music-timeline .progress-bar:hover .current-progress > .pointer{
+    display: block;
+}
+.music-timeline .progress-bar:hover .current-progress{
+    background-color: var(--blue-main);
+}
+.music-timeline .progress-bar .current-progress{
+    background-color: #fff;
+    justify-content: end;
+    transition: width 200ms;
+}
+.music-play-controls{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.pause.play-btn svg:last-of-type{
+    display: inline !important;
+}
+.btn.play-btn svg:last-of-type{
+    display: none;
+}
+.pause.play-btn svg:first-of-type{
+    display: none;
+}
+.music-play-controls :not(.btn.play-btn):hover svg{
+    fill: var(--blue-main);
+}
+.btn--on:not(.btn.play-btn) svg{
+    fill: var(--blue-main) !important;
+}
+.repeat-btn svg:first-of-type{
+    display: none;
+}
+.music-play-controls .btn{
+    margin-left: 20px;
+    cursor: pointer;
+}
+.music-play-controls .btn svg{
+    width: 25px;
+    height: 25px;
+    fill: #fff;
+}
+.music-play-controls .btn.play-btn{
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--blue-main);
+    border-radius: 100%;
+}
+.music-play-controls .play-btn svg{
+    width: 30px;
+    height: 30px;
+    fill: #fff;
+}
+.current-progress .pointer{
+    display: none;
+    width: 5px;
+    height: 13px;
+    border-radius: 2px;
+    background-color: #fff;
+}
+#music-player.off .music-poster{
+    visibility: hidden;
+}
+#music-player.off .btn{
+    cursor: unset;
+}
+#music-player.off .btn:not(.play-btn),
+#music-player.block-next .next-btn,
+#music-player.block-prev .previous-btn{
+    cursor: not-allowed !important;
+}
+#music-player.off .btn:not(.play-btn) svg,
+#music-player.off .btn:not(.play-btn):hover svg{
+    fill: #8a8a8a;
+}
+#music-player.off .music-timeline{
+    color: #8a8a8a;
+}
+#music-player.off .progress-bar .current-progress > .pointer{
+    display: none !important;
+}
+#music-player.off .progress-bar,
+#music-player.off .play-btn{
+    cursor: unset;
+    background-color: #8a8a8a;
+}
+#music-player.block-prev .previous-btn svg,
+#music-player.block-next .next-btn svg{
+    fill: #8a8a8a;
+}
+
+.music-setting{
+    display: flex;
+}
+
+.volume-setting{
+    display: inline-flex;
+    align-items: center;
+}
+.volume-setting .volume-icon{
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+.volume-setting .volume-icon:hover svg{
+    fill: var(--blue-main);
+}
+.volume-setting .volume-icon:hover + .volume__progress-bar .volume__current-progress{
+    background-color: var(--blue-main);
+}
+.volume-setting .volume-icon:hover + .volume__progress-bar .volume__current-progress .pointer{
+    display: inline;
+}
+.volume-setting .volume-icon svg{
+    width: inherit;
+    height: inherit;
+}
+.volume-setting .volume-icon svg:first-of-type,
+.volume-setting .volume-icon svg:last-of-type,
+.volume-icon.loud svg:nth-child(2){
+    display: none;
+}
+.volume-icon.muted svg:first-of-type,
+.volume-icon.muted svg:nth-child(2){
+    display: none !important;
+}
+.volume-icon.loud svg:first-of-type,
+.volume-icon.muted svg:last-of-type{
+    display: inline;
+}
+.volume-setting .volume__progress-bar{
+    cursor: pointer;
+    background-color: #777;
+    height: 5px;
+    border-radius: 2px;
+    width: 100px;
+    display: inline-flex;
+    align-items: center;
+}
+.volume__current-progress{
+    width: calc(5px + 0%);
+    height: 5px;
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 2px;
+    transition: width 500ms;
+}
+.volume__current-progress .pointer{
+    display: none;
+    width: 3px;
+    height: 10px;
+    border-radius: 2px;
+    background-color: #fff;
+}
+.music-setting .volume__progress-bar:hover .volume__current-progress > .pointer{
+    display: block;
+}
+.music-setting .volume__progress-bar:hover .volume__current-progress{
+    background-color: var(--blue-main);
+}
+.music-setting .playlist-show,
+.music-setting .sleep-mode{
+    margin: auto 0 auto 20px;
+    width: 30px;
+    height: 30px;
+}
+.music-setting > .item:last-of-type{
+    margin-right: 20px;
+}
+.music-setting .playlist-show svg,
+.music-setting .sleep-mode svg{
+    width: inherit;
+    height: inherit;
+}
+
+.music-setting > .item:hover svg,
+.music-setting > .item:hover svg{
+    fill: var(--blue-main);
+    cursor: pointer;
+}
+@media (max-width: 1280px) {
+    #connect-wallet_btn{
+        display: none;
+    }
+    .header__nav{
+        margin: 15px 10px;
+    }
+    .avatar{
+        border: none;
+        border-top-right-radius: 15px;
+        border-bottom-right-radius: 15px;
+    }
+    .wallet__container.is-login .wallet-address{
+        display: none;
+    }
+}
+
+@media (max-width: 1027px) {
+    .balance-box{
+        display: none !important;
+    }
+}
+
+@media (max-width: 840px) {
+    
+    .expand__container svg{
+        display: block;
+    }
+    .open-menu.expand-container__wrapper{
+        display: flex;
+    }
+    .expand-container__wrapper{
+        display: none;
+        height: auto;
+        position: absolute;
+        top: 60px;
+        background-color: #fff;
+        border-radius: 15px;
+        padding: 5px;
+        flex-direction: column;
+    }
+    .wrapper-item{
+        color: #444;
+        margin: 10px !important;
+    }
+    .wrapper-item:active, .wrapper-item:hover{
+        opacity: 70%;
+    }
+    .wrapper-item:first-of-type{
+        margin: 0;
+    }
+}
+
+@media (max-width: 700px) {
+    .notification__container{
+        display: none;
+    }
+    .expand__container{
+        display: none;
+    }
+    .wallet__container{
+        display: none;
+    }
+    
+}
+
+@media (max-width: 450px) {
+    .search__container{
+        justify-content: end;
+    }
+    .search-box{
+        width: auto;
+    }
+    .search-box__search-input{
+        display: none;
+    }
+}
