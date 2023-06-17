@@ -293,7 +293,7 @@ class Wallet {
         })
     }
     async login(){
-        const be = "http://localhost:3000"
+        const be = "https://be-poppam.onrender.com"
         try {
             let r = await fetch(be + '/auth/signUp', {
                 method : "POST",
@@ -1400,7 +1400,7 @@ function createSong(){
     Form.querySelector(".audio-upload").style.display = "flex";
     Form.classList.add("create");
 }
-const be ="http://localhost:3000";
+const be ="https://be-poppam.onrender.com";
 async function createBtn(){
     if (!WalletClass.getWalletConnected) return WalletClass.connectWallet('metamask');
     const Form = document.getElementById("created-form");
