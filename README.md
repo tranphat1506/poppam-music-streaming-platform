@@ -4,7 +4,19 @@ PopPam is a music streaming platform and a decentralized music distribution plat
 # NOTE:
 - We are not responsive for mobile screen yet 😭😭😭
 # RUN
-FE : cd ./source/server && npm install && npm run build prod && node ./build/bundle.js <br/>
-BE : cd ./source/backend && npm install && npm run build prod && node ./build/bundle.js
-
+Frontend : <br\>
+```brash
+cd ./source/server
+npm install
+npm run build-prod
+node ./build/bundle.js 
+```
+<br/>
+BE : <br\>
+```brash
+cd ./source/server
+npm install
+npm run build-prod
+node ./build/bundle.js 
+```
 # HIU-FRESHER
