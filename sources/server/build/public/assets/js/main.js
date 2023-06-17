@@ -401,9 +401,7 @@ class Wallet {
     }
 
     // ---------------------
-}
-async function App() {
-      
+}     
     class SongNode{// song data structure 
         /* example = {
             contractAddress : "0x000",
@@ -1313,8 +1311,8 @@ async function App() {
                 return false;
             })
             .then( async (tokenList)=>{
-                if (!t.getCurrentSong) t.startApp(q)
                 await q.addPlaylistToQueue(tokenList);
+                if (!t.getCurrentSong) t.startApp(q)
                 for (const id in tokenList) {
                     if (Object.hasOwnProperty.call(tokenList, id)) {
                         const {
@@ -1355,7 +1353,6 @@ async function App() {
             }
         } 
     })
-}
 const baseUriReplace = (uri)=>{
     return "https://ipfs.io/ipfs/"+uri.split("//")[1];
 }
